@@ -3,7 +3,7 @@ const segmentSerializer = (data) => {
         segment_name: data.name,
         segment_description: data.description,
         created_by: data.createdBy, 
-        modified_by: data.modfiedBy 
+        modified_by: data.modifiedBy 
     }
 }
 

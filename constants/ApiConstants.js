@@ -16,6 +16,8 @@ const statusMessages= {
     internalServerError: "Internal Server Error.",
     segmentsGetSuccess: "Segments Fetched Successfully.",
     segmentGetSuccess: "Segment Details Fetched Successfully.",
+    segmentUpdateSuccess: "Segment Details Updated Successfully.",
+    segmentDeleteSuccess: "Segment Details Deleted Successfully",
 }
 
 module.exports= {statusCodes, statusMessages}

@@ -1,4 +1,4 @@
-const { createSegment, getSegments, getSegment } = require('../../services/SegmentService');
+const { createSegment, getSegments, getSegment, updateSegment, deleteSegment } = require('../../services/SegmentService');
 
 const router = require('express').Router();
 
@@ -16,10 +16,12 @@ router.get('/get-segment/:id', async (req, res) => {
 
 router.post('/update-segment', async (req, res) => {
     //req body with id and updation fields
+    await updateSegment(req, res)
 });
 
 router.delete('/delete-segment/:id', async (req, res) => {
     //id in params
+    await deleteSegment(req.params.id, res)
 });
 
 router.post('/delete-segments', async (req, res) => {
