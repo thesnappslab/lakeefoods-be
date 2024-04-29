@@ -52,7 +52,7 @@ const updateSegment = async (req, res) => {
                     res.status(statusCodes.recordExists).send(responseSerializer(statusCodes.recordExists, false, false, statusMessages.segmentCreateFailedRecordExists))
                 }
             }
-            const updatedSegment= await Segment.findById(req.id).updateOne(segmentSerializer({...segmentRequest, modifiedBy: 'system'}));
+            const updatedSegment= await Segment.findByIdAndUpdate(segmentRequest.id, segmentSerializer({...segmentRequest, modifiedBy: 'system'}), {new: true});
             res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, updatedSegment, statusMessages.segmentUpdateSuccess));
         }else{
             res.status(statusCodes.badRequest).send(responseSerializer(statusCodes.badRequest, false, null, statusMessages.segmentCreateFailedBadRequest))
