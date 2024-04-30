@@ -46,14 +46,18 @@ const updateSegment = async (req, res) => {
     try{
         const segmentRequest = req.body;
         if(segmentRequest.name || segmentRequest.description){
-            if(segmentRequest.name){
+            if(segmentRequest.name && segmentRequest.description || segmentRequest.name){
                 const existingSegment = await Segment.findOne({segment_name: segmentRequest.name});
                 if(existingSegment){
                     res.status(statusCodes.recordExists).send(responseSerializer(statusCodes.recordExists, false, false, statusMessages.segmentCreateFailedRecordExists))
+                }else{
+                    const updatedSegment= await Segment.findByIdAndUpdate(segmentRequest.id, segmentSerializer({...segmentRequest, modifiedBy: 'system'}), {new: true});
+                    res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, updatedSegment, statusMessages.segmentUpdateSuccess));
                 }
+            }else{
+                const updatedSegment= await Segment.findByIdAndUpdate(segmentRequest.id, segmentSerializer({...segmentRequest, modifiedBy: 'system'}), {new: true});
+                res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, updatedSegment, statusMessages.segmentUpdateSuccess));
             }
-            const updatedSegment= await Segment.findByIdAndUpdate(segmentRequest.id, segmentSerializer({...segmentRequest, modifiedBy: 'system'}), {new: true});
-            res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, updatedSegment, statusMessages.segmentUpdateSuccess));
         }else{
             res.status(statusCodes.badRequest).send(responseSerializer(statusCodes.badRequest, false, null, statusMessages.segmentCreateFailedBadRequest))
         }
