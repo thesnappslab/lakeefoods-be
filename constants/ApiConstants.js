@@ -18,6 +18,13 @@ const statusMessages= {
     segmentGetSuccess: "Segment Details Fetched Successfully.",
     segmentUpdateSuccess: "Segment Details Updated Successfully.",
     segmentDeleteSuccess: "Segment Details Deleted Successfully",
+    categoryCreateSuccess: "Category Created Successfully.",
+    categoryCreateFailedRecordExists: "Category with this name already Exists.",
+    categoryCreateFailedBadRequest: "Name and Description are mandatory fields to create the Category.",
+    categoriesGetSuccess: "Categories Fetched Successfully.",
+    categoryGetSuccess: "Category Details Fetched Successfully.",
+    categoryUpdateSuccess: "Category Details Updated Successfully.",
+    categoryDeleteSuccess: "Category Details Deleted Successfully",
 }
 
 module.exports= {statusCodes, statusMessages}

@@ -26,7 +26,7 @@ async function startApp(){
 startApp();
 
 app.use('/admin/segments', require('./controllers/admin/SegmentsController'));
-//app.use('/admin/categories', require('./controllers/admin/CategoriesController'));
+app.use('/admin/categories', require('./controllers/admin/CategoriesController'));
 //app.use('/admin/orders', require('./controllers/admin/OrdersController'));
 //app.use('/admin/items', require('./controllers/admin/ItemsController'));
 //app.use('/admin/insights', require('./controllers/admin/InsightsController'));
