@@ -26,7 +26,8 @@ const createCategory = async(req, res) => {
 
 const getCategories = async(req, res) => {
     try{
-        
+        const categories = await Category.find() 
+        res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, categories, statusMessages.categoriesGetSuccess)); 
     }catch(err){
         console.log(err)
         res.status(statusCodes.internalServerError).send(responseSerializer(statusCodes.internalServerError, false, null, statusMessages.internalServerError))
@@ -35,7 +36,12 @@ const getCategories = async(req, res) => {
 
 const getCategory = async(req, res) => {
     try{
-        
+        const category = await Category.findById(req) 
+        if(category){
+            res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, category, statusMessages.categoryGetSuccess)); 
+        }else{
+            res.status(statusCodes.notFound).send(responseSerializer(statusCodes.notFound, false, null, statusMessages.categoryGetFailedNotFound))
+        }
     }catch(err){
         console.log(err)
         res.status(statusCodes.internalServerError).send(responseSerializer(statusCodes.internalServerError, false, null, statusMessages.internalServerError))
@@ -44,7 +50,23 @@ const getCategory = async(req, res) => {
 
 const editCategory = async(req, res) => {
     try{
-        
+        const categoryRequest= req.body;
+        if( categoryRequest.name || categoryRequest.description || categoryRequest.segments){
+            if(categoryRequest.name){
+                const existingCategory= await Category.findOne({"category_name": categoryRequest.name});
+                if(!existingCategory){
+                    const updatedCategory= await Category.findByIdAndUpdate(categoryRequest.id, categorySerializer({...categoryRequest, modifiedBy: 'system'}), {new: true});
+                    res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, updatedCategory, statusMessages.categoryUpdateSuccess)); 
+                }else{
+                    res.status(statusCodes.recordExists).send(responseSerializer(statusCodes.recordExists, false, null, statusMessages.categoryCreateFailedRecordExists)); 
+                }
+            }else{
+                const updatedCategory= await Category.findByIdAndUpdate(categoryRequest.id, categorySerializer({...categoryRequest, modifiedBy: 'system'}), {new: true});
+                res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, updatedCategory, statusMessages.categoryUpdateSuccess)); 
+            }
+        }else{
+            res.status(statusCodes.badRequest).send(responseSerializer(statusCodes.badRequest, false, null, statusMessages.badRequest))
+        }
     }catch(err){
         console.log(err)
         res.status(statusCodes.internalServerError).send(responseSerializer(statusCodes.internalServerError, false, null, statusMessages.internalServerError))
@@ -53,7 +75,8 @@ const editCategory = async(req, res) => {
 
 const deleteCategory = async(req, res) => {
     try{
-        
+        await Category.findById(req).deleteOne();
+        res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, null, statusMessages.categoryDeleteSuccess));
     }catch(err){
         console.log(err)
         res.status(statusCodes.internalServerError).send(responseSerializer(statusCodes.internalServerError, false, null, statusMessages.internalServerError))

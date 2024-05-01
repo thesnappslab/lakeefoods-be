@@ -36,7 +36,11 @@ const getSegments = async (req, res) => {
 const getSegment = async (req, res) => {
     try{
         const segment = await Segment.findById(req);
-        res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, segment, statusMessages.segmentGetSuccess))
+        if(segment){
+            res.status(statusCodes.success).send(responseSerializer(statusCodes.success, true, segment, statusMessages.segmentGetSuccess))
+        }else{
+            res.status(statusCodes.notFound).send(responseSerializer(statusCodes.notFound, false, null, statusMessages.segmentGetFailedNotFound))
+        }
     }catch(err){
         res.status(statusCodes.internalServerError).send(responseSerializer(statusCodes.internalServerError, false, null, statusMessages.internalServerError))
     }
